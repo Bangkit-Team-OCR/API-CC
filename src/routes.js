@@ -9,6 +9,6 @@ const routes = [
     path: '/auth',
     handler: authHandler,
   },
-]
+];
 
 module.exports = { routes }
