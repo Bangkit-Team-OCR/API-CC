@@ -1,7 +1,10 @@
 // import 3rd party modules
 const Hapi = require('@hapi/hapi');
-// // import local modules
-const { routes } = require('./routes');
+// import local modules
+const { database } = require('./database');
+const {
+  routes
+} = require('./routes');
 const init = async () => {
   const server = Hapi.server({
     port: process.env.NODE_PORT || 5000,

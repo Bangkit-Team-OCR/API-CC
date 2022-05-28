@@ -1,6 +1,8 @@
 
 // import 3rd party modules
 const jwt = require('jsonwebtoken');
+// import local modules
+const { database } = require('./database');
 
 /**
  * 
@@ -16,7 +18,7 @@ const authenticateMobile = (username, password) => {
     // sign jwt
     // jwt docs https://jwt.io/introduction
     const token = jwt.sign({
-      expiresIn: "1 days",
+      expiresIn: "1 years",
       audience: "mobile",
       issuer: "backend"
     }, process.env.SECRET_KEY);
@@ -24,24 +26,31 @@ const authenticateMobile = (username, password) => {
     return token;
   }
   // throw an custom error if username and passwod is invalid
-  throw new Error("CREDENTIAL ERROR::unvalid username or password");
+  throw new Error("CREDENTIAL ERROR::invalid username or password");
 }
 
-const authenticateUser = (username, password) => {
-  // USER_NORMAL in .env
-  // PASSWORD_USER in .env
-  // SECRET_KEY in .env 
-  if (username === process.env.NORMAL_USER && password === process.env.PASSWORD_USER) {
+const authenticateUser = async (email, password) => {
+  const user = await database.getUserByEmail(email);
+  if (email === user.email && password === user.password) {
+    // console.log(user.nik);
     // sign jwt
     // jwt docs https://jwt.io/introduction
+    // console.log(user);
     const token = jwt.sign({
-      expiresIn: "1 days",
+      expiresIn: "1 years",
       audience: "user",
-      issuer: "backend"
+      issuer: "backend",
+      data: {
+        id: user.userId,
+        email: user.email,
+        profileId: user.profileId,
+      }
     }, process.env.SECRET_KEY);
 
     return token;
   }
+  throw new Error("CREDENTIAL ERROR::invalid username or password");
+
 }
 
 module.exports = {
