@@ -1,8 +1,6 @@
 // import local modules
 const { authHandler, registerHandler, loginHandler } = require('./authHandler');
 
-require('dotenv').config();
-
 const routes = [
   {
     method: 'POST',

@@ -4,7 +4,9 @@ const jwt = require('jsonwebtoken');
 const {
   authenticateMobile,
   authenticateUser,
+  registerUser
 } = require('./auth');
+// const { database } = require('./database');
 
 
 /*
@@ -12,7 +14,6 @@ handler for authentication at /auth
 see routes.js
 */
 const authHandler = async (req, h) => {
-  // username and password are sent to headers
   const {
     username,
     password
@@ -39,6 +40,10 @@ const authHandler = async (req, h) => {
   return res;
 };
 
+/*
+handler for user login at /login
+see routes.js
+*/
 const loginHandler = async (req, h) => {
   const {
     email,
@@ -64,11 +69,38 @@ const loginHandler = async (req, h) => {
   }
 
   return res;
-  
+
 };
 
 const registerHandler = async (req, h) => {
+  const {
+    email,
+    password,
+    nik,
+    nama,
+    provinsi,
+    kabupaten,
+    alamat,
+  } = req.payload;
 
+  let res = null;
+  try {
+    const message = await registerUser(email, password, nik, nama, provinsi, kabupaten, alamat);
+
+    res = h.response({
+      status: 'success',
+      message: message
+    });
+    res.statusCode = 201;
+  } catch (error) {
+    res = h.response({
+      status: 'failes',
+      message: error.message
+    });
+    res.statusCode = 401;
+  }
+
+  return res;
 };
 
 module.exports = {

@@ -72,12 +72,12 @@ INSERT INTO profiles (nik, nama, alamat, ttl, provinsi, kabupaten, jenis_kelamin
 INSERT INTO profiles (nik, nama, alamat, ttl, provinsi, kabupaten, jenis_kelamin, agama, kewarganegaraan, kelurahan, rt, rw, kecamatan, pekerjaan) VALUES ('1477483572', 'BEJO', 'MENGGER', 'BANTUL, 09-01-1975', 'DAERAH ISTIMEWA YOGYAKARTA', 'GUNUNGKIDUL', 'Laki-Laki', 'ISLAM', 'WNI', 'KARANGASEM', '006', '010', 'PALIYAN', 'PETANI');
 INSERT INTO profiles (nik, nama, alamat, ttl, provinsi, kabupaten, jenis_kelamin, agama, kewarganegaraan, kelurahan, rt, rw, kecamatan, pekerjaan) VALUES ('2147483647', 'MIRA SETIAWAN', 'JL. PASTI CEPAT', 'JAKARTA, 18-02-1986', ' DKI JAKARTA', 'JAKARTA BARAT', 'Perempuan', 'ISLAM', 'WNI', 'PEGADUNGAN ', '007', '008', 'KALIDERES', 'PEGAWAI SWASTA');
 
-insert into users (email, password, profileId) values (
-  'redi_alamsyah666', 'qwerty123', 1
-);
-insert into users (email, password, profileId) values (
-  'selamet666', 'qwerty123', 2
-);
+-- insert into users (email, password, profileId) values (
+--   'redi_alamsyah666', 'qwerty123', 1
+-- );
+-- insert into users (email, password, profileId) values (
+--   'selamet666', 'qwerty123', 2
+-- );
 
 --
 -- Indexes for dumped tables

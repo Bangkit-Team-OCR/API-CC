@@ -14,6 +14,8 @@ const init = async () => {
   server.route(routes);
 
   await server.start();
+  // const profile = await database.insertProfile("asljfssasd", "alsjfs", "alsjdfsf", "as;ljf", "lakjsdf");
+  // console.log(profile);
   console.log(`Server is running on ${server.info.uri}`);
 };
 

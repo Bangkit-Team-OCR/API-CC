@@ -1,8 +1,10 @@
-
 // import 3rd party modules
 const jwt = require('jsonwebtoken');
+const bycrpt = require('bcryptjs');
 // import local modules
-const { database } = require('./database');
+const {
+  database
+} = require('./database');
 
 /**
  * 
@@ -31,6 +33,11 @@ const authenticateMobile = (username, password) => {
 
 const authenticateUser = async (email, password) => {
   const user = await database.getUserByEmail(email);
+
+  if (typeof user === 'undefined') {
+    throw new Error('DATABASE ERROR:: error fetching user');
+  }
+
   if (email === user.email && password === user.password) {
     // console.log(user.nik);
     // sign jwt
@@ -53,6 +60,35 @@ const authenticateUser = async (email, password) => {
 
 }
 
+const registerUser = async (email, password, nik, nama, provinsi, kabupaten, alamat) => {
+  if (typeof await database.getUserByEmail(email) !== 'undefined') {
+    throw new Error('INSERTION ERROR::duplicate user');
+  }
+
+  let profile = await database.getUserByNik(nik); // if not undefined profileId
+
+  // insertedId
+  if (typeof profile === 'undefined') {
+    profile = await database.insertProfile(nik, nama, provinsi, kabupaten, alamat);
+  }
+  
+  profile = profile.profileId ? profile.profileId : profile.insertedId;
+
+  const salt = bycrpt.genSaltSync();
+  const hashedPass = bycrpt.hashSync(password, salt);
+
+  
+  const inserted = await database.insertUser(email, hashedPass, profile);
+
+  if (inserted) {
+    return 'insert new user success';
+  }
+
+  throw new Error('INSERTION ERROR::failed inserting new user');
+};
+
 module.exports = {
-  authenticateMobile, authenticateUser
+  authenticateMobile,
+  authenticateUser,
+  registerUser
 }
