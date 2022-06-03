@@ -1,5 +1,4 @@
 const mysql = require('mysql');
-const util = require('util')
 
 require('dotenv').config(); // load .env
 
@@ -25,7 +24,7 @@ class Database {
     // });
   }
 
-  getAllUsers() {
+  async getAllUsers() {
     return new Promise((resolve, reject) => {
       this.connection.query({
         sql: 'SELECT * FROM users;',
@@ -35,12 +34,12 @@ class Database {
           console.log(error.message);
         }
 
-        return resolve(results);
+        return resolve(results[0]);
       })
     });
   }
 
-  getUserByNik(nik) {
+  async getUserByNik(nik) {
     return new Promise((resolve, reject) => {
       this.connection.query({
         sql: 'SELECT * FROM profiles WHERE nik = ?;',
@@ -57,7 +56,7 @@ class Database {
   }
   // // select * from users inner join profiles on profiles.profileId = users.profileId;
 
-  getUserByEmail(email) {
+  async getUserByEmail(email) {
     return new Promise((resolve, reject) => {
       this.connection.query({
         sql: 'SELECT * FROM users WHERE email = ?;',

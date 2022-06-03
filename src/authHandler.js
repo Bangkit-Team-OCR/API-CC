@@ -73,6 +73,8 @@ const loginHandler = async (req, h) => {
 };
 
 const registerHandler = async (req, h) => {
+  const { token } = req.headers;
+
   const {
     email,
     password,
@@ -85,6 +87,7 @@ const registerHandler = async (req, h) => {
 
   let res = null;
   try {
+    const admin = jwt.verify(token, process.env.SECRET_KEY);
     const message = await registerUser(email, password, nik, nama, provinsi, kabupaten, alamat);
 
     res = h.response({

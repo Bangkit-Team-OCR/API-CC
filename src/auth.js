@@ -33,12 +33,12 @@ const authenticateMobile = (username, password) => {
 
 const authenticateUser = async (email, password) => {
   const user = await database.getUserByEmail(email);
-
   if (typeof user === 'undefined') {
     throw new Error('DATABASE ERROR:: error fetching user');
   }
 
-  if (email === user.email && password === user.password) {
+  const isPassword = bycrpt.compareSync(password, user.password);
+  if (email === user.email && isPassword) {
     // console.log(user.nik);
     // sign jwt
     // jwt docs https://jwt.io/introduction
@@ -61,6 +61,8 @@ const authenticateUser = async (email, password) => {
 }
 
 const registerUser = async (email, password, nik, nama, provinsi, kabupaten, alamat) => {
+  
+
   if (typeof await database.getUserByEmail(email) !== 'undefined') {
     throw new Error('INSERTION ERROR::duplicate user');
   }
