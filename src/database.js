@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const util = require('util')
 
 require('dotenv').config(); // load .env
 
@@ -15,17 +16,14 @@ class Database {
       password: password,
       database: DB_NAME,
     });
-
-    this.connection.connect((err) => {
-      if (err) {
-        callback(`CAN\'T CONNECT TO DATABASE ${username}@${hostname}`);
-        // console.log(`CAN\'T CONNECT TO DATABASE ${username}@${hostname}`);
-        // return `CAN\'T CONNECT TO DATABASE ${username}@${hostname}`;
-      }
-    });
+    // this.connection.connect((err) => {
+    //   if (err) {
+    //     callback(`CAN\'T CONNECT TO DATABASE ${username}@${hostname}`);
+    //     // console.log(`CAN\'T CONNECT TO DATABASE ${username}@${hostname}`);
+    //     // return `CAN\'T CONNECT TO DATABASE ${username}@${hostname}`;
+    //   }
+    // });
   }
-
-  // test() { console.log('testing error'); }
 
   getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -107,7 +105,9 @@ class Database {
 }
 
 const database = new Database(HOSTNAME, USERNAME, PASSWORD, (err) => {
-  throw new Error(err);
+  if (err) {
+    console.log(err);
+  }
 });
 module.exports = {
   database
