@@ -1,5 +1,8 @@
 // import local modules
 const { authHandler, registerHandler, loginHandler } = require('./authHandler');
+const loadModelHandler = require('./modelHandler');
+// testing
+
 
 const routes = [
   {
@@ -16,6 +19,11 @@ const routes = [
     method: 'POST',
     path: '/register',
     handler: registerHandler,
+  },
+  {
+    method: 'POST',
+    path: '/load-model',
+    handler: loadModelHandler,
   },
 ];
 

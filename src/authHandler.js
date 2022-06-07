@@ -97,7 +97,7 @@ const registerHandler = async (req, h) => {
     res.statusCode = 201;
   } catch (error) {
     res = h.response({
-      status: 'failes',
+      status: 'failed',
       message: error.message
     });
     res.statusCode = 401;
