@@ -9,6 +9,11 @@ const init = async () => {
   const server = Hapi.server({
     port: process.env.NODE_PORT || 5000,
     host: process.env.NODE_HOST || 'localhost',
+	  routes: {
+    cors: {
+      origin: ['*'],
+    },
+  },
   });
 
   server.route(routes);
