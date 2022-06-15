@@ -71,7 +71,23 @@ class Database {
     });
   }
 
-  async insertUser(email, password, profileId) {
+  async insertUser(email, password) {
+    return new Promise((resolve, reject) => {
+      this.connection.query({
+        sql: 'INSERT INTO users (email, password) VALUES (?, ?)',
+        timeout: 30000,
+        values: [email, password],
+      }, (error, results, fields) => {
+        if (error) {
+          console.log(error.message);
+        }
+
+        return resolve(results);
+      })
+    });
+  }
+
+  async insertUserWithProfileId(email, password, profileId) {
     return new Promise((resolve, reject) => {
       this.connection.query({
         sql: 'INSERT INTO users (email, password, profileId) VALUES (?, ?, ?)',

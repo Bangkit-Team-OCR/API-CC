@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const {
   authenticateMobile,
   authenticateUser,
-  registerUser
+  registerUser,
+  registerEmailUser
 } = require('./auth');
 // const { database } = require('./database');
 
@@ -73,22 +74,28 @@ const loginHandler = async (req, h) => {
 };
 
 const registerHandler = async (req, h) => {
-  const { token } = req.headers;
-
-  const {
-    email,
-    password,
-    nik,
-    nama,
-    provinsi,
-    kabupaten,
-    alamat,
-  } = req.payload;
-
   let res = null;
   try {
+    const { token } = req.headers;
+  
+    const {
+      email,
+      password,
+      // nik,
+      // nama,
+      // provinsi,
+      // kabupaten,
+      // alamat,
+    } = req.payload;
+  
+  
     const admin = jwt.verify(token, process.env.SECRET_KEY);
-    const message = await registerUser(email, password, nik, nama, provinsi, kabupaten, alamat);
+
+    if (admin.audience !== 'mobile') {
+      throw new Error('CREDENTIAL ERROR::not admin try change the token');
+    }
+
+    const message = await registerEmailUser(email, password);
 
     res = h.response({
       status: 'success',

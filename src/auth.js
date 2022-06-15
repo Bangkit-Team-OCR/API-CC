@@ -60,6 +60,24 @@ const authenticateUser = async (email, password) => {
 
 }
 
+const registerEmailUser = async (email, password) => {
+  if (typeof await database.getUserByEmail(email) !== 'undefined') {
+    throw new Error('INSERTION ERROR::duplicate user');
+  }
+
+  const salt = bycrpt.genSaltSync();
+  const hashedPass = bycrpt.hashSync(password, salt);
+
+  
+  const inserted = await database.insertUser(email, hashedPass);
+
+  if (inserted) {
+    return 'insert new user success';
+  }
+
+  throw new Error('INSERTION ERROR::failed inserting new user');
+}
+
 const registerUser = async (email, password, nik, nama, provinsi, kabupaten, alamat) => {
   
 
@@ -67,20 +85,20 @@ const registerUser = async (email, password, nik, nama, provinsi, kabupaten, ala
     throw new Error('INSERTION ERROR::duplicate user');
   }
 
-  let profile = await database.getUserByNik(nik); // if not undefined profileId
+  // let profile = await database.getUserByNik(nik); // if not undefined profileId
 
   // insertedId
-  if (typeof profile === 'undefined') {
-    profile = await database.insertProfile(nik, nama, provinsi, kabupaten, alamat);
-  }
+  // if (typeof profile === 'undefined') {
+  //   profile = await database.insertProfile(nik, nama, provinsi, kabupaten, alamat);
+  // }
   
-  profile = profile.profileId ? profile.profileId : profile.insertedId;
+  // profile = profile.profileId ? profile.profileId : profile.insertedId;
 
   const salt = bycrpt.genSaltSync();
   const hashedPass = bycrpt.hashSync(password, salt);
 
   
-  const inserted = await database.insertUser(email, hashedPass, profile);
+  const inserted = await database.insertUser(email, hashedPass);
 
   if (inserted) {
     return 'insert new user success';
@@ -92,5 +110,6 @@ const registerUser = async (email, password, nik, nama, provinsi, kabupaten, ala
 module.exports = {
   authenticateMobile,
   authenticateUser,
-  registerUser
-}
+  registerUser,
+  registerEmailUser,
+};
