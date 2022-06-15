@@ -77,8 +77,9 @@ const loginHandler = async (req, h) => {
 const registerHandler = async (req, h) => {
   let res = null;
   try {
+    const { token } = req.headers;
     const {
-      token,
+      // token,
       email,
       password
     } = req.payload;
@@ -110,8 +111,9 @@ const registerHandler = async (req, h) => {
 const registerProfileHandler = async (req, h) => {
   let res = null;
   try {
+    const { token } = req.headers;
     const {
-      token,
+      // token,
       nik,
       nama,
       provinsi,
