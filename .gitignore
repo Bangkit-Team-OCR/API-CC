@@ -5,3 +5,4 @@ app.js
 base64.base64
 my_model.h5
 img.jpg
+.env

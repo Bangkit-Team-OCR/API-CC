@@ -78,33 +78,35 @@ const registerEmailUser = async (email, password) => {
   throw new Error('INSERTION ERROR::failed inserting new user');
 }
 
-const registerUser = async (email, password, nik, nama, provinsi, kabupaten, alamat) => {
-  
-
-  if (typeof await database.getUserByEmail(email) !== 'undefined') {
-    throw new Error('INSERTION ERROR::duplicate user');
+const registerUser = async (email, nik, nama, provinsi, kabupaten, alamat) => {
+  if (typeof nik === 'undefined') {
+    throw new Error('INSERTION ERROR::nik cannot be null');
   }
 
-  // let profile = await database.getUserByNik(nik); // if not undefined profileId
+  if (typeof await database.getUserByEmail(email) === 'undefined') {
+    throw new Error('INSERTION ERROR::no users with email = ' + email);
+  }
+
+  let profile = await database.getUserByNik(nik); // if not undefined profileId
 
   // insertedId
-  // if (typeof profile === 'undefined') {
-  //   profile = await database.insertProfile(nik, nama, provinsi, kabupaten, alamat);
-  // }
+  if (typeof profile === 'undefined') {
+    profile = await database.insertProfile(nik, nama, provinsi, kabupaten, alamat);
+  }
   
-  // profile = profile.profileId ? profile.profileId : profile.insertedId;
+  profile = profile.profileId ? profile.profileId : profile.insertId;
 
-  const salt = bycrpt.genSaltSync();
-  const hashedPass = bycrpt.hashSync(password, salt);
+  // const salt = bycrpt.genSaltSync();
+  // const hashedPass = bycrpt.hashSync(password, salt);
 
   
-  const inserted = await database.insertUser(email, hashedPass);
+  const inserted = await database.insertUserWithProfileId(email, profile);
 
   if (inserted) {
-    return 'insert new user success';
+    return 'insert new profile success';
   }
 
-  throw new Error('INSERTION ERROR::failed inserting new user');
+  throw new Error('INSERTION ERROR::failed inserting new profile');
 };
 
 module.exports = {

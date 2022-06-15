@@ -18,7 +18,7 @@ const authHandler = async (req, h) => {
   const {
     username,
     password
-  } = req.headers;
+  } = req.payload;
 
   let res = null;
 
@@ -49,7 +49,7 @@ const loginHandler = async (req, h) => {
   const {
     email,
     password
-  } = req.headers;
+  } = req.payload;
 
   let res = null;
 
@@ -76,19 +76,12 @@ const loginHandler = async (req, h) => {
 const registerHandler = async (req, h) => {
   let res = null;
   try {
-    const { token } = req.headers;
-  
     const {
+      token,
       email,
-      password,
-      // nik,
-      // nama,
-      // provinsi,
-      // kabupaten,
-      // alamat,
+      password
     } = req.payload;
-  
-  
+
     const admin = jwt.verify(token, process.env.SECRET_KEY);
 
     if (admin.audience !== 'mobile') {
@@ -113,8 +106,46 @@ const registerHandler = async (req, h) => {
   return res;
 };
 
+const registerProfileHandler = async (req, h) => {
+  let res = null;
+  try {
+    const {
+      token,
+      email,
+      nik,
+      nama,
+      provinsi,
+      kabupaten,
+      alamat
+    } = req.payload;
+
+    const admin = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (admin.audience !== 'mobile') {
+      throw new Error('CREDENTIAL ERROR::not admin try change the token');
+    }
+
+    const message = await registerUser(email, nik, nama, provinsi, kabupaten, alamat);
+
+    res = h.response({
+      status: 'success',
+      message: message
+    });
+    res.statusCode = 201;
+  } catch (error) {
+    res = h.response({
+      status: 'failed',
+      message: error.message
+    });
+    res.statusCode = 401;
+  }
+
+  return res;
+};
+
 module.exports = {
   authHandler,
   loginHandler,
   registerHandler,
+  registerProfileHandler
 };

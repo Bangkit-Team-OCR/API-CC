@@ -1,11 +1,15 @@
 // import local modules
-const { authHandler, registerHandler, loginHandler } = require('./authHandler');
+const {
+  authHandler,
+  registerHandler,
+  loginHandler,
+  registerProfileHandler
+} = require('./authHandler');
 const loadModelHandler = require('./modelHandler');
 // testing
 
 
-const routes = [
-  {
+const routes = [{
     method: 'POST',
     path: '/auth',
     handler: authHandler,
@@ -25,6 +29,13 @@ const routes = [
     path: '/load-model',
     handler: loadModelHandler,
   },
+  {
+    method: 'POST',
+    path: '/register-profile',
+    handler: registerProfileHandler,
+  }
 ];
 
-module.exports = { routes }
+module.exports = {
+  routes
+}
