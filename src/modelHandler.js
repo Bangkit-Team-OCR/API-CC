@@ -17,8 +17,9 @@ const loadModelHandler = async (req, h) => {
     
     await uploadFromMemory(img, id);
 
-    const response = await axios.post('http://34.101.90.36:5000', {
-      imgpath: `https://storage.googleapis.com/capstone-bangkit-ocr/ktp/${id}.jpg`
+    const response = await axios.post('http://10.184.0.6:5000', {
+      imgpath: `https://storage.googleapis.com/capstone-bangkit-ocr/ktp/${id}.jpg`,
+      uuid: id
     });
     // const response = await fetch(, {
     //   method: 'POST',
