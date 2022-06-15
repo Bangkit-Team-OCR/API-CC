@@ -7,6 +7,7 @@ const {
   registerUser,
   registerEmailUser
 } = require('./auth');
+const { database } = require('./database');
 // const { database } = require('./database');
 
 
@@ -111,7 +112,6 @@ const registerProfileHandler = async (req, h) => {
   try {
     const {
       token,
-      email,
       nik,
       nama,
       provinsi,
@@ -121,11 +121,11 @@ const registerProfileHandler = async (req, h) => {
 
     const admin = jwt.verify(token, process.env.SECRET_KEY);
 
-    if (admin.audience !== 'mobile') {
-      throw new Error('CREDENTIAL ERROR::not admin try change the token');
+    if (admin.audience !== 'user') {
+      throw new Error('CREDENTIAL ERROR::not user try change the token');
     }
 
-    const message = await registerUser(email, nik, nama, provinsi, kabupaten, alamat);
+    const message = await registerUser(admin.email, nik, nama, provinsi, kabupaten, alamat);
 
     res = h.response({
       status: 'success',
@@ -143,9 +143,41 @@ const registerProfileHandler = async (req, h) => {
   return res;
 };
 
+const getUserProfileHandler = async (req, h) => {
+  let res = null;
+  try {
+    const {
+      token,
+    } = req.headers;
+    const user = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (user.audience !== 'user') {
+      throw new Error('CREDENTIAL ERROR::not user try change the token');
+    }
+
+    const data = await database.getUserProfileByEmail(user.data.email);
+
+    res = h.response({
+      status: 'success',
+      message: 'getting user\'s profile successfully',
+      data
+    });
+    res.statusCode = 201;
+  } catch (error) {
+    res = h.response({
+      status: 'failed',
+      message: error.message
+    });
+    res.statusCode = 401;
+  }
+
+  return res;
+};
+
 module.exports = {
   authHandler,
   loginHandler,
   registerHandler,
-  registerProfileHandler
+  registerProfileHandler,
+  getUserProfileHandler
 };

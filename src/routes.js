@@ -3,7 +3,8 @@ const {
   authHandler,
   registerHandler,
   loginHandler,
-  registerProfileHandler
+  registerProfileHandler,
+  getUserProfileHandler
 } = require('./authHandler');
 const loadModelHandler = require('./modelHandler');
 // testing
@@ -33,6 +34,11 @@ const routes = [{
     method: 'POST',
     path: '/register-profile',
     handler: registerProfileHandler,
+  },
+  {
+    method: 'GET',
+    path: '/user',
+    handler: getUserProfileHandler,
   }
 ];
 
