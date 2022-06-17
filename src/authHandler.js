@@ -118,16 +118,17 @@ const registerProfileHandler = async (req, h) => {
       nama,
       provinsi,
       kabupaten,
-      alamat
+      alamat,
+      email,
     } = req.payload;
 
     const admin = jwt.verify(token, process.env.SECRET_KEY);
 
-    if (admin.audience !== 'user') {
+    if (admin.audience !== 'mobile') {
       throw new Error('CREDENTIAL ERROR::not user try change the token');
     }
 
-    const message = await registerUser(admin.email, nik, nama, provinsi, kabupaten, alamat);
+    const message = await registerUser(email, nik, nama, provinsi, kabupaten, alamat);
 
     res = h.response({
       status: 'success',
@@ -151,20 +152,25 @@ const getUserProfileHandler = async (req, h) => {
     const {
       token,
     } = req.headers;
-    const user = jwt.verify(token, process.env.SECRET_KEY);
 
-    if (user.audience !== 'user') {
+    const { email } = req.payload;
+
+    // const { email } = req.payload;
+    const user = jwt.verify(token, process.env.SECRET_KEY);
+    
+
+    if (user.audience !== 'user' || user.data.email !== email) {
       throw new Error('CREDENTIAL ERROR::not user try change the token');
     }
 
-    const data = await database.getUserProfileByEmail(user.data.email);
+    const data = await database.getUserProfileByEmail(email);
 
     res = h.response({
       status: 'success',
       message: 'getting user\'s profile successfully',
       data
     });
-    res.statusCode = 201;
+    res.statusCode = 200;
   } catch (error) {
     res = h.response({
       status: 'failed',
