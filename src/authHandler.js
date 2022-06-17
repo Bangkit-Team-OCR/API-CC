@@ -159,7 +159,11 @@ const getUserProfileHandler = async (req, h) => {
     const user = jwt.verify(token, process.env.SECRET_KEY);
     
 
-    if (user.audience !== 'user' || user.data.email !== email) {
+    // if (user.audience !== 'user' || user.data.email !== email) {
+    //   throw new Error('CREDENTIAL ERROR::not user try change the token');
+    // }
+
+    if (user.audience !== 'mobile') {
       throw new Error('CREDENTIAL ERROR::not user try change the token');
     }
 
