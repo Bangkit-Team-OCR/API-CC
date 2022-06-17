@@ -36,7 +36,7 @@ const routes = [{
     handler: registerProfileHandler,
   },
   {
-    method: 'GET',
+    method: 'POST',
     path: '/user',
     handler: getUserProfileHandler,
   }
